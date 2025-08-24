@@ -23,6 +23,19 @@ builder.Configuration.AddAzureAppConfiguration(options =>
     options.Connect(new Uri("https://ole-test.azconfig.io"), new DefaultAzureCredential());
 });
 
+//var keyvaultName = System.Environment.GetEnvironmentVariable("AZURE_KEYVAULT_NAME");
+
+// Load secrets from Azure Key Vault
+#if DEBUG
+builder.Configuration.AddAzureKeyVault(
+    new Uri($"https://ole-test-keyvault.vault.azure.net/"),
+    new DefaultAzureCredential());
+#else
+builder.Configuration.AddAzureKeyVault(
+    new Uri($"https://{keyvaultName}.vault.azure.net/"),
+    new EnvironmentCredential());
+#endif
+
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
@@ -34,18 +47,6 @@ if (app.Environment.IsDevelopment())
         options.RoutePrefix = string.Empty; // Use swagger UI as start page when debugging
     });
 }
-
-//app.MapGet("/", () => "Hello World!");
-
-//app.MapGet("/runtime", async () =>
-//{
-//    // Resolve service via DI
-//    var requestService = app.Services.GetRequiredService<IRequestService>();
-//    string url = "https://api.github.com/repos/dotnet/runtime";
-//    string result = await requestService.GetAsync(url);
-
-//    return result;
-//});
 
 app.MapPost("/api/bi-calendar-events", async (CalendarEventsQuery calendarEventsQuery,
     [FromServices] ICalendarEventService calendarEventService) =>
