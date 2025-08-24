@@ -1,4 +1,6 @@
+using Azure.Identity;
 using BICalendar;
+using BICalendar.Options;
 using BICalendar.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -12,6 +14,15 @@ builder.Services.AddMemoryCache();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.Configure<CalendarOptions>(
+    builder.Configuration.GetSection("Calendar"));
+
+// Load configuration from Azure App Configuration 
+builder.Configuration.AddAzureAppConfiguration(options =>
+{
+    options.Connect(new Uri("https://ole-test.azconfig.io"), new DefaultAzureCredential());
+});
+
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
@@ -20,7 +31,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI(options =>
     {
         options.SwaggerEndpoint("/swagger/v1/swagger.json", "v1");
-        options.RoutePrefix = string.Empty;
+        options.RoutePrefix = string.Empty; // Use swagger UI as start page when debugging
     });
 }
 

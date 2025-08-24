@@ -27,6 +27,7 @@ namespace BICalendar.Services
             string jsonData = await _requestService.GetAsync("/api/calendar-events", calendarEventsQuery);
             var result = JsonSerializer.Deserialize<List<CalendarEvent>>(jsonData);
 
+            // Store result in cache:
             _cache.Set(cacheKey, result, TimeSpan.FromMinutes(5));
 
             return result;
