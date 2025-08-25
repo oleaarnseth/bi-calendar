@@ -28,7 +28,7 @@ namespace BICalendar.Services
             var result = JsonSerializer.Deserialize<List<CalendarEvent>>(jsonData);
 
             // Store result in cache:
-            _cache.Set(cacheKey, result, TimeSpan.FromMinutes(5));
+            _cache.Set(cacheKey, result, TimeSpan.FromMinutes(2));
 
             return result;
         }

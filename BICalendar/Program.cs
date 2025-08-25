@@ -2,7 +2,7 @@ using Azure.Identity;
 using BICalendar;
 using BICalendar.Options;
 using BICalendar.Services;
-using Microsoft.AspNetCore.Mvc;
+using BICalendar.Endpoints;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -48,20 +48,6 @@ if (app.Environment.IsDevelopment())
     });
 }
 
-app.MapPost("/api/bi-calendar-events", async (CalendarEventsQuery calendarEventsQuery,
-    [FromServices] ICalendarEventService calendarEventService) =>
-{
-    // Send request
-    var result = await calendarEventService.GetCalendarEventsAsync(calendarEventsQuery);
-
-    // Return result
-    return Results.Ok(result);
-})
-.WithName("GetBICalendarEvents") // operationId in Swagger
-.WithTags("Calendar Events")   // groups endpoints in Swagger
-.Accepts<CalendarEventsQuery>("application/json")
-.Produces<IEnumerable<CalendarEvent>>(StatusCodes.Status200OK)
-.Produces(StatusCodes.Status400BadRequest)
-.WithOpenApi();
+app.MapCalendarEventEndpoints();
 
 app.Run();
