@@ -3,6 +3,8 @@ using Moq;
 using Microsoft.Extensions.Caching.Memory;
 using System.Text.Json;
 using BICalendar.Services;
+using BICalendar.Options;
+using Microsoft.Extensions.Options;
 
 namespace BICalendar.Tests
 {
@@ -11,12 +13,24 @@ namespace BICalendar.Tests
         private readonly MemoryCache _memoryCache;
         private readonly Mock<IRequestService> _requestServiceMock;
         private readonly BICalendarEventService _service;
+        private readonly Mock<IOptions<CalendarOptions>> _calendarOptionsMock;
 
         public BICalendarEventServiceTests()
         {
             _memoryCache = new MemoryCache(new MemoryCacheOptions());
             _requestServiceMock = new Mock<IRequestService>();
-            _service = new BICalendarEventService(_requestServiceMock.Object, _memoryCache);
+            _calendarOptionsMock = new Mock<IOptions<CalendarOptions>>();
+            _calendarOptionsMock.Setup(o => o.Value)
+                .Returns(
+                    new CalendarOptions
+                    {
+                        CalendarApiBaseAddress = "https://bi.no",
+                        CacheAbsoluteExpiryMinutes = 2
+                    });
+            _service = new BICalendarEventService(
+                _requestServiceMock.Object,
+                _memoryCache,
+                _calendarOptionsMock.Object);
         }
 
         [Fact]

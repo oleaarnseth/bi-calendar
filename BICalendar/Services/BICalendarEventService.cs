@@ -1,5 +1,7 @@
 ﻿using System.Text.Json;
+using BICalendar.Options;
 using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Options;
 
 namespace BICalendar.Services
 {
@@ -7,12 +9,15 @@ namespace BICalendar.Services
     {
         private readonly IRequestService _requestService;
         private readonly IMemoryCache _cache;
+        private readonly CalendarOptions _calendarOptions;
 
         public BICalendarEventService(IRequestService requestService,
-            IMemoryCache cache)
+            IMemoryCache cache,
+            IOptions<CalendarOptions> calendarOptions)
         {
             _requestService = requestService;
             _cache = cache;
+            _calendarOptions = calendarOptions.Value;
         }
 
         public async Task<IEnumerable<CalendarEvent>> GetCalendarEventsAsync(CalendarEventsQuery calendarEventsQuery)
@@ -28,7 +33,8 @@ namespace BICalendar.Services
             var result = JsonSerializer.Deserialize<List<CalendarEvent>>(jsonData);
 
             // Store result in cache:
-            _cache.Set(cacheKey, result, TimeSpan.FromMinutes(2));
+            var cacheAbsoluteExpiry = _calendarOptions.CacheAbsoluteExpiryMinutes;
+            _cache.Set(cacheKey, result, TimeSpan.FromMinutes(cacheAbsoluteExpiry));
 
             return result;
         }

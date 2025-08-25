@@ -1,12 +1,11 @@
 using Azure.Identity;
-using BICalendar;
 using BICalendar.Options;
 using BICalendar.Services;
 using BICalendar.Endpoints;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Register services:
+// Register services
 builder.Services.AddHttpClient<IRequestService, BIRequestService>();
 builder.Services.AddScoped<ICalendarEventService, BICalendarEventService>();
 builder.Services.AddMemoryCache();
@@ -17,24 +16,26 @@ builder.Services.AddSwaggerGen();
 builder.Services.Configure<CalendarOptions>(
     builder.Configuration.GetSection("Calendar"));
 
-// Load configuration from Azure App Configuration 
+// Use default credential if debug, and managed identity for release
+#if DEBUG
+var azureCredential = new DefaultAzureCredential();
+#else
+var azureCredential = new ManagedIdentityCredential();
+#endif
+
+// Add Azure App Configuration 
+var appConfigUri = System.Environment.GetEnvironmentVariable("AZURE_APPCONFIG_URI");
 builder.Configuration.AddAzureAppConfiguration(options =>
 {
-    options.Connect(new Uri("https://ole-test.azconfig.io"), new DefaultAzureCredential());
+    options.Connect(new Uri(appConfigUri), azureCredential);
 });
 
-//var keyvaultName = System.Environment.GetEnvironmentVariable("AZURE_KEYVAULT_NAME");
-
-// Load secrets from Azure Key Vault
-#if DEBUG
+// Add Azure Key Vault
+var keyVaultUri = System.Environment.GetEnvironmentVariable("AZURE_KEYVAULT_URI");
 builder.Configuration.AddAzureKeyVault(
-    new Uri($"https://ole-test-keyvault.vault.azure.net/"),
-    new DefaultAzureCredential());
-#else
-builder.Configuration.AddAzureKeyVault(
-    new Uri($"https://{keyvaultName}.vault.azure.net/"),
-    new EnvironmentCredential());
-#endif
+    new Uri(keyVaultUri),
+    azureCredential
+);
 
 var app = builder.Build();
 
@@ -48,6 +49,7 @@ if (app.Environment.IsDevelopment())
     });
 }
 
+// Map API endpoints
 app.MapCalendarEventEndpoints();
 
 app.Run();

@@ -7,7 +7,9 @@
       "launchBrowser": true,
       "applicationUrl": "http://localhost:5130",
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "AZURE_KEYVAULT_URI": "https://ole-test-keyvault.vault.azure.net/",
+        "AZURE_APPCONFIG_URI": "https://ole-test.azconfig.io"
       }
     },
     "https": {
@@ -16,7 +18,9 @@
       "launchBrowser": true,
       "applicationUrl": "https://localhost:7237;http://localhost:5130",
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "AZURE_KEYVAULT_URI": "https://ole-test-keyvault.vault.azure.net/",
+        "AZURE_APPCONFIG_URI": "https://ole-test.azconfig.io"
       }
     }
   }
