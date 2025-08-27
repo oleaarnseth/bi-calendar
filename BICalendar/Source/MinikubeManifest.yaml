@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    io.kompose.service: bicalendar
+  name: bicalendar
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: bicalendar
+  template:
+    metadata:
+      labels:
+        io.kompose.service: bicalendar
+    spec:
+      containers:
+        - image: minikube/bicalendar:debug
+          name: bicalendar
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8080
+          env:
+            - name: AZURE_KEYVAULT_URI
+              value: "https://ole-test-keyvault.vault.azure.net/"
+            - name: AZURE_APPCONFIG_URI
+              value: "https://ole-test.azconfig.io"
+      restartPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    io.kompose.service: bicalendar
+  name: bicalendar
+spec:
+  type: LoadBalancer
+  ports:
+    - port: 80
+      targetPort: 8080
+  selector:
+    io.kompose.service: bicalendar
