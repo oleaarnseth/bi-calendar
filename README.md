@@ -13,8 +13,8 @@ For the app to work, the following environment settings must be set for the cont
 
 | Env setting name | Description |
 | -------- | ------- |
-| AZURE_KEYVAULT_URI  | <URI TO AZURE KEY VAULT>  |
-| AZURE_APPCONFIG_URI | <URI TO AZURE APP CONFIG> |
+| AZURE_KEYVAULT_URI  | URI to Azure Key Vault  |
+| AZURE_APPCONFIG_URI | URI to Azure App Config |
 
 In the Azure App Config or Key Vault, the following settings must be present:
 
