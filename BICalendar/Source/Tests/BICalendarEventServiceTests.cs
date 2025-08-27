@@ -2,9 +2,11 @@
 using Moq;
 using Microsoft.Extensions.Caching.Memory;
 using System.Text.Json;
-using BICalendar.Services;
 using BICalendar.Options;
 using Microsoft.Extensions.Options;
+using BICalendar.Models;
+using BICalendar.Services.Interfaces;
+using BICalendar.Services.Implementations;
 
 namespace BICalendar.Tests
 {

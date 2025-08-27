@@ -1,8 +1,9 @@
 ﻿using BICalendar.Helpers;
 using BICalendar.Options;
+using BICalendar.Services.Interfaces;
 using Microsoft.Extensions.Options;
 
-namespace BICalendar.Services
+namespace BICalendar.Services.Implementations
 {
     public class BIRequestService : IRequestService
     {

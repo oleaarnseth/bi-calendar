@@ -1,4 +1,4 @@
-﻿namespace BICalendar
+﻿namespace BICalendar.Models
 {
     public class CalendarEventsQuery
     {

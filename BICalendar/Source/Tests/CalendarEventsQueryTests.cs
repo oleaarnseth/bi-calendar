@@ -1,4 +1,5 @@
 ﻿using Xunit;
+using BICalendar.Models;
 
 namespace BICalendar.Tests
 {

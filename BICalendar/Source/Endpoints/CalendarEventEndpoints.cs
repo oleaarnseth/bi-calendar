@@ -1,4 +1,6 @@
-﻿using BICalendar.Services;
+﻿using BICalendar.Models;
+using BICalendar.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 
 namespace BICalendar.Endpoints
 {
@@ -8,7 +10,7 @@ namespace BICalendar.Endpoints
         {
             var group = routes.MapGroup("/api");
 
-            group.MapPost("/bi-calendar-events", async (CalendarEventsQuery calendarEventsQuery,
+            group.MapPost("/bi-calendar-events", [Authorize(Policy = "AuthZPolicy")] async (CalendarEventsQuery calendarEventsQuery,
                 ICalendarEventService calendarEventService) =>
             {
                 // Send request

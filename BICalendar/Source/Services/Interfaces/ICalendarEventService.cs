@@ -1,4 +1,6 @@
-﻿namespace BICalendar.Services
+﻿using BICalendar.Models;
+
+namespace BICalendar.Services.Interfaces
 {
     public interface ICalendarEventService
     {

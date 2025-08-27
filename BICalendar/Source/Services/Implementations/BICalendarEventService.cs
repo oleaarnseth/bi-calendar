@@ -1,9 +1,11 @@
 ﻿using System.Text.Json;
+using BICalendar.Models;
 using BICalendar.Options;
+using BICalendar.Services.Interfaces;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Options;
 
-namespace BICalendar.Services
+namespace BICalendar.Services.Implementations
 {
     public class BICalendarEventService : ICalendarEventService
     {

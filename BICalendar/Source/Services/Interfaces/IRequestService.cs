@@ -1,4 +1,4 @@
-﻿namespace BICalendar.Services
+﻿namespace BICalendar.Services.Interfaces
 {
     public interface IRequestService
     {
